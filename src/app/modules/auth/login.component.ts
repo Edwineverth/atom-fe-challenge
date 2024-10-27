@@ -72,6 +72,7 @@ export class LoginComponent {
         if (this.isRegisterMode && this.registerForm.valid) {
             const { email, password } = this.registerForm.value;
             try {
+                console.log({ email, password });
                 await lastValueFrom(this.authService.register(email, password));
                 await lastValueFrom(this.authService.login(email as string, password as string));
                 await this.router.navigate(["/tasks"]);
