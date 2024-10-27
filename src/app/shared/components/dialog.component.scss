@@ -1,0 +1,11 @@
+h2 {
+  font-weight: bold;
+}
+
+[data-error="true"] {
+  color: red;
+}
+
+[data-error="false"] {
+  color: green;
+}

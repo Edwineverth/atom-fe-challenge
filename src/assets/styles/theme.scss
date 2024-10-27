@@ -1,7 +1,6 @@
-// Importa Angular Material si usas temas personalizados
+// theme.scss
 @use '@angular/material' as mat;
 
-// Variables globales de estilo
 $primary-color: #6495ed;
 $secondary-color: #ff6600;
 $background-light: #f7f9fc;
@@ -12,37 +11,14 @@ $shadow-light: rgba(0, 0, 0, 0.1);
 $shadow-medium: rgba(0, 0, 0, 0.15);
 $spacing: 1.5rem;
 
-// Mixin global para estilos de botones
-@mixin button-styles($bg-color, $hover-color) {
-  background-color: $bg-color;
-  color: #fff;
-  border-radius: $border-radius;
-  padding: 0.6rem 1rem;
-  cursor: pointer;
-  font-weight: bold;
-  transition: background-color 0.3s;
-
-  &:hover {
-    background-color: $hover-color;
-  }
-
-  &:disabled {
-    background-color: #ccc;
-    color: #666;
-    cursor: not-allowed;
-  }
-}
-
-// Configuración de colores para Angular Material
 $atom-primary: mat.define-palette(mat.$blue-palette, 500);
 $atom-accent: mat.define-palette(mat.$orange-palette, A200, A100, A400);
 $atom-warn: mat.define-palette(mat.$red-palette);
 
 $atom-typography: mat.define-typography-config(
-  $font-family: 'Inter, sans-serif'
+  $font-family: 'Poppins, sans-serif'
 );
 
-// Definición del tema personalizado de Angular Material
 $atom-theme: mat.define-light-theme((
   color: (
     primary: $atom-primary,
@@ -52,6 +28,5 @@ $atom-theme: mat.define-light-theme((
   typography: $atom-typography,
 ));
 
-// Incluye estilos y tema de Angular Material
 @include mat.core();
 @include mat.all-component-themes($atom-theme);

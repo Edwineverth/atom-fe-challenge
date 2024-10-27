@@ -2,6 +2,8 @@ import { HttpClientModule } from "@angular/common/http";
 import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
 
+import { authGuard } from "./core/guards/auth.guard";
+
 const routes: Routes = [
     { path: "", redirectTo: "auth", pathMatch: "full" },
     {
@@ -10,7 +12,8 @@ const routes: Routes = [
     },
     {
         path: "tasks",
-        loadComponent: () => import("./modules/tasks/task-page.component").then((m) => m.TaskPageComponent)
+        loadComponent: () => import("./modules/tasks/task-page.component").then((m) => m.TaskPageComponent),
+        canActivate: [authGuard]
     }
 ];
 

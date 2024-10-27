@@ -29,7 +29,8 @@ export class TaskService implements TaskServiceInterface {
     }
 
     public updateTask(taskId: string, task: Partial<Task>): Observable<Task> {
-        return this.http.put<Task>(`${this.configService.apiUrl}/api/tasks/${taskId}`, task, { headers: this.getAuthHeaders() });
+        console.log(task);
+        return this.http.put<Task>(`${this.configService.apiUrl}/api/tasks/${taskId}`, { completed: task.completed }, { headers: this.getAuthHeaders() });
     }
 
     public deleteTask(taskId: string): Observable<void> {
