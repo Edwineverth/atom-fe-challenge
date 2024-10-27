@@ -1,5 +1,5 @@
 import { CommonModule } from "@angular/common";
-import { Component, inject, OnInit } from "@angular/core";
+import { ChangeDetectorRef, Component, inject, OnInit } from "@angular/core";
 import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from "@angular/forms";
 import { MatButtonModule } from "@angular/material/button";
 import { MatCardModule } from "@angular/material/card";
@@ -45,9 +45,10 @@ import { Task } from "../../shared/models/task.model";
 })
 export class TaskPageComponent implements OnInit {
     private taskService = inject(TaskService);
-    private router = inject(Router);
+    router = inject(Router);
     private fb = inject(FormBuilder);
     private dialog = inject(MatDialog);
+    private cdr = inject(ChangeDetectorRef);
 
     tasks: Task[] = [];
     taskForm: FormGroup = this.fb.group({
@@ -60,6 +61,7 @@ export class TaskPageComponent implements OnInit {
 
     ngOnInit(): void {
         this.loadTasks();
+        this.cdr.detectChanges();
     }
 
     openDialog(title: string, message: string): void {
@@ -73,6 +75,7 @@ export class TaskPageComponent implements OnInit {
         this.taskService.getTasks().subscribe(
             (tasks) => {
                 this.tasks = tasks.sort((a, b) => new Date(b.createdAt!).getTime() - new Date(a.createdAt!).getTime());
+                this.cdr.detectChanges();
             },
             (error) => {
                 console.log(error);
