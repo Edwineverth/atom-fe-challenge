@@ -2,21 +2,61 @@
   <h1 *ngIf="!isRegisterMode">Inicio de Sesión</h1>
   <h1 *ngIf="isRegisterMode">Registro</h1>
 
-  <form [formGroup]="isRegisterMode ? registerForm : loginForm" (ngSubmit)="onSubmit()">
-    <app-custom-input label="Correo" [control]="getControl('email')" errorMessage="Correo inválido o requerido"></app-custom-input>
-    <app-custom-input label="Contraseña" [control]="getControl('password')" errorMessage="Contraseña requerida" type="password"></app-custom-input>
+  <form [formGroup]="isRegisterMode ? registerForm : loginForm" (ngSubmit)="onSubmit()" *ngIf="isRegisterMode" appPasswordMatch="password">
+    <app-custom-input
+      label="Correo"
+      [control]="getControl('email')"
+      errorMessage="Correo inválido o requerido"
+    ></app-custom-input>
+    <app-custom-input
+      label="Contraseña"
+      [control]="getControl('password')"
+      errorMessage="Contraseña requerida"
+      type="password"
+    ></app-custom-input>
 
     <!-- Campo de Confirmar Contraseña solo visible en modo registro -->
-    <app-custom-input *ngIf="isRegisterMode" label="Confirmar Contraseña" [control]="getControl('confirmPassword')" errorMessage="Las contraseñas no coinciden o es requerida" type="password"></app-custom-input>
+    <app-custom-input
+      label="Confirmar Contraseña"
+      [control]="getControl('confirmPassword')"
+      errorMessage="Las contraseñas no coinciden o es requerida"
+      type="password"
+    ></app-custom-input>
 
-    <app-custom-button color="primary" size="large" [disabled]="isRegisterMode ? registerForm.invalid : loginForm.invalid">
-      {{ isRegisterMode ? 'Registrar' : 'Iniciar Sesión' }}
+    <app-custom-button
+      color="primary"
+      size="large"
+      [disabled]="registerForm.invalid"
+    >
+      Registrar
     </app-custom-button>
-
-    <p>
-      <a (click)="toggleRegisterMode()" class="toggle-link">
-        {{ isRegisterMode ? '¿Ya tienes cuenta? Inicia sesión' : '¿Eres nuevo? Regístrate aquí' }}
-      </a>
-    </p>
   </form>
+
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" *ngIf="!isRegisterMode">
+    <app-custom-input
+      label="Correo"
+      [control]="getControl('email')"
+      errorMessage="Correo inválido o requerido"
+    ></app-custom-input>
+    <app-custom-input
+      label="Contraseña"
+      [control]="getControl('password')"
+      errorMessage="Contraseña requerida"
+      type="password"
+    ></app-custom-input>
+
+    <app-custom-button
+      color="primary"
+      size="large"
+      [disabled]="loginForm.invalid"
+    >
+      Iniciar Sesión
+    </app-custom-button>
+  </form>
+
+  <p>
+    <a (click)="toggleRegisterMode()" class="toggle-link">
+      {{ isRegisterMode ? "¿Ya tienes cuenta? Inicia sesión" : "¿Eres nuevo? Regístrate aquí" }}
+    </a>
+  </p>
 </div>

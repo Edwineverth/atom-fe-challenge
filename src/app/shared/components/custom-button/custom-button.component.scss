@@ -1,32 +1,35 @@
 @import "../../../../assets/styles/theme";
 
 :host {
-  display: inline-block;
-  width: 100%;
+    display: inline-block;
+    width: 100%;
 }
 
 button {
-  width: 100%;
-  font-size: 1.1rem;
-  font-weight: 600;
-  background-color: $primary-color;
-  color: #fff;
-  border-radius: $border-radius;
-  padding: 0.7rem;
-  box-shadow: 0 4px 10px rgba($primary-color, 0.3);
-  transition: background-color 0.3s, box-shadow 0.3s, transform 0.3s;
-  cursor: pointer;
+    width: 100%;
+    font-size: 1.1rem;
+    font-weight: 600;
+    background-color: $primary-color;
+    color: #fff;
+    border-radius: $border-radius;
+    padding: 0.7rem;
+    box-shadow: 0 4px 10px rgba($primary-color, 0.3);
+    transition:
+        background-color 0.3s,
+        box-shadow 0.3s,
+        transform 0.3s;
+    cursor: pointer;
 
-  &:hover {
-    background-color: darken($primary-color, 10%);
-    box-shadow: 0 6px 15px rgba($primary-color, 0.5);
-    transform: translateY(-2px);
-  }
+    &:hover {
+        background-color: darken($primary-color, 10%);
+        box-shadow: 0 6px 15px rgba($primary-color, 0.5);
+        transform: translateY(-2px);
+    }
 
-  &:disabled {
-    background-color: #ccc;
-    color: #666;
-    box-shadow: none;
-    cursor: not-allowed;
-  }
+    &:disabled {
+        background-color: #ccc;
+        color: #666;
+        box-shadow: none;
+        cursor: not-allowed;
+    }
 }

@@ -7,13 +7,10 @@ import { MatButtonModule } from "@angular/material/button";
     standalone: true,
     imports: [MatButtonModule, NgClass],
     template: `
-    <button mat-raised-button
-            [color]="color"
-            [disabled]="disabled"
-            [ngClass]="buttonSize">
-      <ng-content></ng-content>
-    </button>
-  `,
+        <button mat-raised-button [color]="color" [disabled]="disabled" [ngClass]="buttonSize">
+            <ng-content></ng-content>
+        </button>
+    `,
     styleUrls: ["./custom-button.component.scss"]
 })
 export class CustomButtonComponent {

@@ -9,14 +9,14 @@ import { MatInputModule } from "@angular/material/input";
     standalone: true,
     imports: [MatFormFieldModule, MatInputModule, ReactiveFormsModule, NgIf],
     template: `
-    <mat-form-field appearance="outline" class="custom-input">
-      <mat-label>{{ label }}</mat-label>
-      <input matInput [formControl]="control" [type]="type" />
-      <mat-error *ngIf="control.invalid && control.touched">
-        {{ errorMessage }}
-      </mat-error>
-    </mat-form-field>
-  `,
+        <mat-form-field appearance="outline" class="custom-input">
+            <mat-label>{{ label }}</mat-label>
+            <input matInput [formControl]="control" [type]="type" />
+            <mat-error *ngIf="control.invalid && control.touched">
+                {{ errorMessage }}
+            </mat-error>
+        </mat-form-field>
+    `,
     styleUrls: ["./custom-input.component.scss"]
 })
 export class CustomInputComponent {

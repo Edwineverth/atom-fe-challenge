@@ -1,5 +1,5 @@
 // theme.scss
-@use '@angular/material' as mat;
+@use "@angular/material" as mat;
 
 $primary-color: #6495ed;
 $secondary-color: #ff6600;
@@ -16,17 +16,19 @@ $atom-accent: mat.define-palette(mat.$orange-palette, A200, A100, A400);
 $atom-warn: mat.define-palette(mat.$red-palette);
 
 $atom-typography: mat.define-typography-config(
-  $font-family: 'Poppins, sans-serif'
+    $font-family: "Poppins, sans-serif"
 );
 
-$atom-theme: mat.define-light-theme((
-  color: (
-    primary: $atom-primary,
-    accent: $atom-accent,
-    warn: $atom-warn,
-  ),
-  typography: $atom-typography,
-));
+$atom-theme: mat.define-light-theme(
+    (
+        color: (
+            primary: $atom-primary,
+            accent: $atom-accent,
+            warn: $atom-warn
+        ),
+        typography: $atom-typography
+    )
+);
 
 @include mat.core();
 @include mat.all-component-themes($atom-theme);

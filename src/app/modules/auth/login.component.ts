@@ -1,9 +1,7 @@
 import { CommonModule } from "@angular/common";
 import { HttpClientModule } from "@angular/common/http";
 import { Component, inject } from "@angular/core";
-import {
-    FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators
-} from "@angular/forms";
+import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import { MatButtonModule } from "@angular/material/button";
 import { MatDialog, MatDialogModule } from "@angular/material/dialog";
 import { MatFormFieldModule } from "@angular/material/form-field";
@@ -15,6 +13,7 @@ import { AuthService } from "../../core/services/auth.service";
 import { CustomButtonComponent } from "../../shared/components/custom-button/custom-button.component";
 import { CustomInputComponent } from "../../shared/components/custom-input/custom-input.component";
 import { DialogComponent } from "../../shared/components/dialog.component";
+import { PasswordMatchDirective } from "../../shared/directives/password/app-password-match.directive";
 
 @Component({
     selector: "app-login",
@@ -29,12 +28,12 @@ import { DialogComponent } from "../../shared/components/dialog.component";
         MatButtonModule,
         CustomInputComponent,
         CustomButtonComponent,
-        MatDialogModule
+        MatDialogModule,
+        PasswordMatchDirective
     ],
     templateUrl: "./login.component.html",
     styleUrls: ["./login.component.scss"]
 })
-
 export class LoginComponent {
     private authService = inject(AuthService);
     private router = inject(Router);
@@ -46,16 +45,11 @@ export class LoginComponent {
         password: new FormControl<string>("", [Validators.required])
     });
 
-    registerForm: FormGroup = this.fb.group(
-        {
-            email: new FormControl<string>("", [Validators.required, Validators.email]),
-            password: new FormControl<string>("", [Validators.required]),
-            confirmPassword: new FormControl<string>("", [Validators.required])
-        },
-        {
-            validators: this.passwordMatchValidator
-        }
-    );
+    registerForm: FormGroup = this.fb.group({
+        email: new FormControl<string>("", [Validators.required, Validators.email]),
+        password: new FormControl<string>("", [Validators.required]),
+        confirmPassword: new FormControl<string>("", [Validators.required])
+    });
 
     isRegisterMode = false;
 
@@ -82,7 +76,10 @@ export class LoginComponent {
                 await lastValueFrom(this.authService.login(email as string, password as string));
                 await this.router.navigate(["/tasks"]);
             } catch (error) {
-                this.openDialog("Error en el registro", "Hubo un problema al registrar su cuenta. Por favor, inténtelo de nuevo más tarde.");
+                this.openDialog(
+                    "Error en el registro",
+                    "Hubo un problema al registrar su cuenta. Por favor, inténtelo de nuevo más tarde."
+                );
             }
         } else if (!this.isRegisterMode && this.loginForm.valid) {
             const { email, password } = this.loginForm.value;
@@ -90,15 +87,12 @@ export class LoginComponent {
                 await lastValueFrom(this.authService.login(email as string, password as string));
                 await this.router.navigate(["/tasks"]);
             } catch (error) {
-                this.openDialog("Error en el inicio de sesión", "Las credenciales ingresadas son incorrectas o hubo un problema. Por favor, inténtelo de nuevo.");
+                this.openDialog(
+                    "Error en el inicio de sesión",
+                    "Las credenciales ingresadas son incorrectas o hubo un problema. Por favor, inténtelo de nuevo."
+                );
                 await this.router.navigate(["/auth"]);
             }
         }
-    }
-
-    passwordMatchValidator(form: FormGroup): { [key: string]: boolean } | null {
-        const password = form.get("password")?.value;
-        const confirmPassword = form.get("confirmPassword")?.value;
-        return password === confirmPassword ? null : { mismatch: true };
     }
 }

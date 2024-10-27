@@ -10,7 +10,10 @@ import { ConfigService } from "./config.service";
     providedIn: "root"
 })
 export class AuthService implements AuthServiceInterface {
-    constructor(private http: HttpClient, private configService: ConfigService) {}
+    constructor(
+        private http: HttpClient,
+        private configService: ConfigService
+    ) {}
 
     public register(email: string, password: string): Observable<User> {
         return this.http.post<User>(`${this.configService.apiUrl}/api/users`, {
@@ -20,16 +23,18 @@ export class AuthService implements AuthServiceInterface {
     }
 
     public login(email: string, password: string): Observable<{ token: string; user: User }> {
-        return this.http.post<{ token: string; user: User }>(`${this.configService.apiUrl}/api/login`, {
-            email,
-            password
-        }).pipe(
-            tap((response) => {
-                if (response && response.token) {
-                    localStorage.setItem("token", response.token); // Guarda el token en localStorage
-                }
+        return this.http
+            .post<{ token: string; user: User }>(`${this.configService.apiUrl}/api/login`, {
+                email,
+                password
             })
-        );
+            .pipe(
+                tap((response) => {
+                    if (response && response.token) {
+                        localStorage.setItem("token", response.token); // Guarda el token en localStorage
+                    }
+                })
+            );
     }
 
     public isAuthenticated(): boolean {

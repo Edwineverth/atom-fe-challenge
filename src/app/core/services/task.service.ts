@@ -11,7 +11,11 @@ import { ConfigService } from "./config.service";
     providedIn: "root"
 })
 export class TaskService implements TaskServiceInterface {
-    constructor(private http: HttpClient, private configService: ConfigService, private authService: AuthService) {}
+    constructor(
+        private http: HttpClient,
+        private configService: ConfigService,
+        private authService: AuthService
+    ) {}
 
     private getAuthHeaders(): HttpHeaders {
         const token = this.authService.getToken();
@@ -30,10 +34,16 @@ export class TaskService implements TaskServiceInterface {
 
     public updateTask(taskId: string, task: Partial<Task>): Observable<Task> {
         console.log(task);
-        return this.http.put<Task>(`${this.configService.apiUrl}/api/tasks/${taskId}`, { completed: task.completed }, { headers: this.getAuthHeaders() });
+        return this.http.put<Task>(
+            `${this.configService.apiUrl}/api/tasks/${taskId}`,
+            { title: task.title, description: task.description, completed: task.completed },
+            { headers: this.getAuthHeaders() }
+        );
     }
 
     public deleteTask(taskId: string): Observable<void> {
-        return this.http.delete<void>(`${this.configService.apiUrl}/api/tasks/${taskId}`, { headers: this.getAuthHeaders() });
+        return this.http.delete<void>(`${this.configService.apiUrl}/api/tasks/${taskId}`, {
+            headers: this.getAuthHeaders()
+        });
     }
 }

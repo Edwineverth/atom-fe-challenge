@@ -1,32 +1,32 @@
 @import "../../../../assets/styles/theme";
 
 :host {
-  display: block;
-  width: 100%;
+    display: block;
+    width: 100%;
 }
 
 mat-form-field {
-  width: 100%;
-  transition: box-shadow 0.3s ease;
-
-  .mat-form-field-wrapper {
-    border-radius: $border-radius;
-    border: 1px solid #d3d3d3;
-    padding: 0.3rem 0.8rem;
     width: 100%;
+    transition: box-shadow 0.3s ease;
 
-    &:focus-within {
-      border-color: $primary-color;
+    .mat-form-field-wrapper {
+        border-radius: $border-radius;
+        border: 1px solid #d3d3d3;
+        padding: 0.3rem 0.8rem;
+        width: 100%;
+
+        &:focus-within {
+            border-color: $primary-color;
+        }
     }
-  }
 
-  .mat-form-field-underline {
-    display: none;
-  }
+    .mat-form-field-underline {
+        display: none;
+    }
 
-  input {
-    font-size: 1rem;
-    padding: 0.6rem;
-    border-radius: $border-radius;
-  }
+    input {
+        font-size: 1rem;
+        padding: 0.6rem;
+        border-radius: $border-radius;
+    }
 }

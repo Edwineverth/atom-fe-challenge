@@ -1,12 +1,11 @@
 import { CommonModule } from "@angular/common";
 import { Component, inject, OnInit } from "@angular/core";
-import {
-    FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators
-} from "@angular/forms";
+import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from "@angular/forms";
 import { MatButtonModule } from "@angular/material/button";
 import { MatCardModule } from "@angular/material/card";
 import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MatLineModule } from "@angular/material/core";
+import { MatDialog, MatDialogModule } from "@angular/material/dialog";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatIconModule } from "@angular/material/icon";
 import { MatInputModule } from "@angular/material/input";
@@ -16,6 +15,8 @@ import { Router, RouterModule } from "@angular/router";
 import { TaskService } from "../../core/services/task.service";
 import { CustomButtonComponent } from "../../shared/components/custom-button/custom-button.component";
 import { CustomInputComponent } from "../../shared/components/custom-input/custom-input.component";
+import { DialogComponent } from "../../shared/components/dialog.component";
+import { AutoFocusDirective } from "../../shared/directives/fucus/app-auto-fucus.directive";
 import { Task } from "../../shared/models/task.model";
 
 @Component({
@@ -35,7 +36,9 @@ import { Task } from "../../shared/models/task.model";
         MatListModule,
         MatLineModule,
         FormsModule,
-        MatIconModule
+        MatIconModule,
+        MatDialogModule,
+        AutoFocusDirective
     ],
     templateUrl: "./task-page.component.html",
     styleUrls: ["./task-page.component.scss"]
@@ -44,18 +47,26 @@ export class TaskPageComponent implements OnInit {
     private taskService = inject(TaskService);
     private router = inject(Router);
     private fb = inject(FormBuilder);
+    private dialog = inject(MatDialog);
 
     tasks: Task[] = [];
     taskForm: FormGroup = this.fb.group({
         title: new FormControl<string>("", Validators.required),
-        description: new FormControl<string>("", Validators.required),
+        description: new FormControl<string>("", Validators.required)
     });
 
     isEditMode = false;
-    taskToEditId: string | null = null; // Guarda el ID de la tarea que se está editando
+    taskToEditId: string | null = null;
 
     ngOnInit(): void {
         this.loadTasks();
+    }
+
+    openDialog(title: string, message: string): void {
+        this.dialog.open(DialogComponent, {
+            data: { title, message, isError: true },
+            width: "400px"
+        });
     }
 
     loadTasks(): void {
@@ -64,7 +75,11 @@ export class TaskPageComponent implements OnInit {
                 this.tasks = tasks.sort((a, b) => new Date(b.createdAt!).getTime() - new Date(a.createdAt!).getTime());
             },
             (error) => {
-                console.error("Error al cargar tareas:", error);
+                console.log(error);
+                this.openDialog(
+                    "Error al cargar tareas",
+                    "Hubo un problema al cargar las tareas. Por favor, inténtelo de nuevo."
+                );
             }
         );
     }
@@ -77,10 +92,19 @@ export class TaskPageComponent implements OnInit {
                 userId: "userId_placeholder",
                 completed: false
             };
-            this.taskService.createTask(newTask).subscribe(() => {
-                this.taskForm.reset();
-                this.loadTasks();
-            });
+            this.taskService.createTask(newTask).subscribe(
+                () => {
+                    this.taskForm.reset();
+                    this.loadTasks();
+                },
+                (error) => {
+                    console.log(error);
+                    this.openDialog(
+                        "Error al agregar tarea",
+                        "Hubo un problema al agregar la tarea. Por favor, inténtelo de nuevo."
+                    );
+                }
+            );
         }
     }
 
@@ -95,18 +119,26 @@ export class TaskPageComponent implements OnInit {
 
     updateTask(): void {
         if (this.taskForm.valid && this.taskToEditId) {
+            console.log("update");
             const updatedTask: Partial<Task> = {
-                id: this.taskToEditId,
                 title: this.taskForm.value.title!,
-                description: this.taskForm.value.description!,
-                completed: false
+                description: this.taskForm.value.description!
             };
-            this.taskService.updateTask(this.taskToEditId, updatedTask).subscribe(() => {
-                this.taskForm.reset();
-                this.isEditMode = false;
-                this.taskToEditId = null;
-                this.loadTasks();
-            });
+            this.taskService.updateTask(this.taskToEditId, updatedTask).subscribe(
+                () => {
+                    this.taskForm.reset();
+                    this.isEditMode = false;
+                    this.taskToEditId = null;
+                    this.loadTasks();
+                },
+                (error) => {
+                    console.log(error);
+                    this.openDialog(
+                        "Error al actualizar tarea",
+                        "Hubo un problema al actualizar la tarea. Por favor, inténtelo de nuevo."
+                    );
+                }
+            );
         }
     }
 
@@ -118,18 +150,37 @@ export class TaskPageComponent implements OnInit {
 
     toggleTaskCompletion(task: Task): void {
         const updatedTask = { ...task, completed: !task.completed };
-        this.taskService.updateTask(updatedTask.id!, updatedTask).subscribe(() => {
-            this.loadTasks();
-        });
+        this.taskService.updateTask(updatedTask.id!, updatedTask).subscribe(
+            () => {
+                this.loadTasks();
+            },
+            (error) => {
+                console.log(error);
+                this.openDialog(
+                    "Error al cambiar el estado de la tarea",
+                    "Hubo un problema al cambiar el estado de la tarea. Por favor, inténtelo de nuevo."
+                );
+            }
+        );
     }
 
     deleteTask(taskId: string | undefined): void {
         if (!taskId) {
-            throw new Error("codigo malo");
+            this.openDialog("Error al eliminar tarea", "El ID de la tarea es inválido.");
+            return;
         }
-        this.taskService.deleteTask(taskId).subscribe(() => {
-            this.loadTasks();
-        });
+        this.taskService.deleteTask(taskId).subscribe(
+            () => {
+                this.loadTasks();
+            },
+            (error) => {
+                console.log(error);
+                this.openDialog(
+                    "Error al eliminar tarea",
+                    "Hubo un problema al eliminar la tarea. Por favor, inténtelo de nuevo."
+                );
+            }
+        );
     }
 
     logout(): void {
