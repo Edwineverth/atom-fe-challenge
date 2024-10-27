@@ -1,111 +1,57 @@
-// Custom Theming for Angular Material
-// For more information: https://material.angular.io/guide/theming
+// Importa Angular Material si usas temas personalizados
 @use '@angular/material' as mat;
-// Plus imports for other components in your app.
 
+// Variables globales de estilo
+$primary-color: #6495ed;
+$secondary-color: #ff6600;
+$background-light: #f7f9fc;
+$background-gradient: linear-gradient(135deg, #f0f4f8, #d9e4ec);
+$text-color-dark: #333;
+$border-radius: 8px;
+$shadow-light: rgba(0, 0, 0, 0.1);
+$shadow-medium: rgba(0, 0, 0, 0.15);
+$spacing: 1.5rem;
 
-// Include the common styles for Angular Material. We include this here so that you only
-// have to load a single css file for Angular Material in your app.
-// Be sure that you only ever include this mixin once!
-@include mat.core();
+// Mixin global para estilos de botones
+@mixin button-styles($bg-color, $hover-color) {
+  background-color: $bg-color;
+  color: #fff;
+  border-radius: $border-radius;
+  padding: 0.6rem 1rem;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s;
 
-// Define the palettes for your theme using the Material Design palettes available in palette.scss
-// (imported above). For each palette, you can optionally specify a default, lighter, and darker
-// hue. Available color palettes: https://material.io/design/color/
-$dark-primary-text: rgba(black, 0.87);
-$light-primary-text: white;
+  &:hover {
+    background-color: $hover-color;
+  }
 
-$orange-atom-palette: (
-  50: #fff7e0,
-  100: #ffeab1,
-  200: #ffdc7e,
-  300: #ffd04a,
-  400: #ffc41f,
-  500: #ffba00,
-  600: #ffac00,
-  700: #ff9900,
-  800: #ff8700,
-  900: #ff6600,
-  A100: #ffd180,
-  A200: #ffab40,
-  A400: #ff9100,
-  A700: #ff6d00,
-  contrast: (
-    50: $dark-primary-text,
-    100: $dark-primary-text,
-    200: $dark-primary-text,
-    300: $dark-primary-text,
-    400: $dark-primary-text,
-    500: $dark-primary-text,
-    600: $dark-primary-text,
-    700: $dark-primary-text,
-    800: $light-primary-text,
-    900: $light-primary-text,
-    A100: $dark-primary-text,
-    A200: $dark-primary-text,
-    A400: $dark-primary-text,
-    A700: black,
-  )
-);
+  &:disabled {
+    background-color: #ccc;
+    color: #666;
+    cursor: not-allowed;
+  }
+}
 
-$blue-accent-palette: (
-  50: #e3f3fe,
-  100: #bbdfff,
-  200: #8eccff,
-  300: #5fb8ff,
-  400: #38a8ff,
-  500: #0099ff,
-  600: #048bf1,
-  700: #0478dd,
-  800: #0467cb,
-  900: #0248ac,
-  A100: #82b1ff,
-  A200: #448aff,
-  A400: #2979ff,
-  A700: #2962ff,
-  contrast: (
-    50: $dark-primary-text,
-    100: $dark-primary-text,
-    200: $dark-primary-text,
-    300: $dark-primary-text,
-    400: $dark-primary-text,
-    500: $light-primary-text,
-    600: $light-primary-text,
-    700: $light-primary-text,
-    800: $light-primary-text,
-    900: $light-primary-text,
-    A100: $dark-primary-text,
-    A200: $light-primary-text,
-    A400: $light-primary-text,
-    A700: $light-primary-text,
-  )
-);
-
-$atom-challenge-fe-template-primary: mat.define-palette($orange-atom-palette, 900);
-$atom-challenge-fe-template-accent: mat.define-palette($blue-accent-palette, A200, A100, A400);
-
-// The "warn" palette is optional and defaults to red if not specified.
-$my-warn: mat.define-palette(mat.$red-palette);
+// Configuración de colores para Angular Material
+$atom-primary: mat.define-palette(mat.$blue-palette, 500);
+$atom-accent: mat.define-palette(mat.$orange-palette, A200, A100, A400);
+$atom-warn: mat.define-palette(mat.$red-palette);
 
 $atom-typography: mat.define-typography-config(
-  $font-family: Inter,
+  $font-family: 'Inter, sans-serif'
 );
 
-// Create the theme object. A theme consists of configurations for individual
-// theming systems such as "color" or "typography".
-$atom-challenge-fe-template-theme: mat.define-light-theme((
+// Definición del tema personalizado de Angular Material
+$atom-theme: mat.define-light-theme((
   color: (
-    primary: $atom-challenge-fe-template-primary,
-    accent: $atom-challenge-fe-template-accent,
-    warn: $my-warn,
+    primary: $atom-primary,
+    accent: $atom-accent,
+    warn: $atom-warn,
   ),
   typography: $atom-typography,
 ));
 
-// Include theme styles for core and each component used in your app.
-// Alternatively, you can import and @include the theme mixins for each component
-// that you are using.
-@include mat.all-component-themes($atom-challenge-fe-template-theme);
-
-
-/* You can add global styles to this file, and also import other style files */
+// Incluye estilos y tema de Angular Material
+@include mat.core();
+@include mat.all-component-themes($atom-theme);

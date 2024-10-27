@@ -1,0 +1,12 @@
+<div class="login-container">
+  <h1>Inicio de Sesión</h1>
+
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+    <app-custom-input label="Correo" [control]="getControl('email')" errorMessage="Correo inválido o requerido"></app-custom-input>
+    <app-custom-input label="Contraseña" [control]="getControl('password')" errorMessage="Contraseña requerida" type="password"></app-custom-input>
+
+    <app-custom-button color="primary" size="large" [disabled]="loginForm.invalid">
+      Iniciar Sesión
+    </app-custom-button>
+  </form>
+</div>
